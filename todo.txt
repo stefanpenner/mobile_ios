@@ -1,0 +1,38 @@
+[ ] base typography
+[ ] refactor css
+
+[ ] flush out left column
+[ ] start on right column
+
+[ ] fix accidental scrolling
+  [ ] when clicking on a perfectly positioned scrollable, the viewport
+shifts.
+  [ ] two stacked scroll views cause some confusion when transitioning
+      need to find a better way to decide "what to do"
+
+[ ] rock solid swipe gestures
+  [ ] should not vertically scroll viewport
+  [ ] gestures on headers of left/right column should also open/close
+main content
+  [ ] swipe left/right only goes so far..
+  [ ] energy?
+
+[ ] dynamic data
+  [ ] bind data via ember
+
+[ ] content stream
+  [ ] status updates
+  [ ] photo posts
+
+[ ] slide up "post"
+
+
+------- concepts ---------
+
+[ ] surfaces
+  [ ] isolated css namespace
+  [ ] stack
+  [ ] transition
+    [ ] slide up/down/left/right
+    [ ] slide to positions
+    [ ] fade

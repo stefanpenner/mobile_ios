@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="My App Name">
+    <meta name="apple-mobile-web-app-status-bar-style" content="white" />
+
+    <style>
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+}
+
+.not-selectable {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.selectable {
+  -webkit-touch-callout: all;
+  -webkit-user-select: all;
+  -khtml-user-select: all;
+  -moz-user-select: all;
+  -ms-user-select: all;
+  user-select: all;
+}
+.place-left {
+  float: left;
+}
+
+.place-right {
+  float: right;
+}
+.inset-button {
+  height: 30px;
+  width: 48px;
+  box-shadow: inset 0 0 3px rgba(0,0,0,1),inset 0 0 0px 1px rgba(0,0,0,0.5);
+  border-radius: 5px;
+  margin: 6px 9px;
+  border-bottom: 1px solid #3F4F8C;
+}
+
+.inset-button:active {
+  box-shadow: inset 0 2px 100px rgba(0,0,0,0.1),inset 0 1px 0px 1px rgba(0,0,0,0.5);
+}
+img {
+ -webkit-user-drag: none;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+html,body {
+  height: 100%;
+  overflow: hidden;
+}
+html, body, #left, #center, #right {
+  height: 100%
+}
+
+#left, #center, #right {
+  top: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+#left {
+  z-index: 1;
+  background: #24293A;
+}
+
+#left input[type="search"] {
+  width: 95%;
+  padding: 1em;
+  margin: 10px 7px;
+  background: #363D4D;
+  -webkit-appearance: none;
+  outline: none;
+  -webkit-box-sizing: content-box;
+  border: none;
+  border-radius: 39px;
+  color: rgb(160, 159, 159);
+  line-height: 22px;
+  font-size: 16px;
+  padding: 0.4em;
+  box-shadow: inset 0 0 1px 1px #191D29;
+  border-bottom: 1px solid #3D424F;
+  box-sizing: border-box;
+}
+#left-header {
+  border-bottom: 1px solid #0D1026
+}
+.left-placeholder {
+  background: #32374A;
+  height: 31px;
+  line-height: 31px;
+  color: #8991A4;
+  font-size: 16px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-family: Arial;
+  text-shadow: 0 1px 2px black;
+  text-indent: 1em;
+}
+.left-entry {
+  border-top: 1px solid #292D3B;
+  border-bottom: 1px solid #1A1E29;
+  height: 44px;
+  line-height: 44px;
+  font-size: 18px;
+  color: #A0A7B9;
+  font-family: Arial;
+  text-shadow: 0 1px 2px black;
+  text-indent: 2em;
+}
+
+#center {
+  z-index: 3;
+  background: #B0B8D1;
+  width: 100%;
+  -webkit-transform-style: preserve-3d;
+  overflow: hidden;
+  box-shadow: 0 0 5px black;
+}
+#right {
+  z-index: 0;
+  background: rgb(75, 196, 75);
+}
+
+#header{
+  position: fixed;
+  box-shadow: 0 0 5px black;
+  width: 100%;
+  z-index: 9999999;
+}
+
+#content {
+  margin-top: 48px;
+}
+.entry {
+  position: relative;
+  background: white;
+  min-height: 100px;
+  margin: 1em;
+  border-radius: 2px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.5)
+}
+.entry-body{
+  margin: 5px;
+  padding-bottom: 30px;
+}
+
+.entry-footer {
+    position: absolute;
+    bottom: 0;
+    height: 30px;
+    background: #DFE3EA;
+    width: 100%;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+
+}
+.blue-gradient {
+  background: rgb(95,111,172); /* Old browsers */
+  background: -moz-linear-gradient(top, rgba(95,111,172,1) 0%, rgba(35,48,118,1) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(95,111,172,1)), color-stop(100%,rgba(35,48,118,1))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, rgba(95,111,172,1) 0%,rgba(35,48,118,1) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, rgba(95,111,172,1) 0%,rgba(35,48,118,1) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, rgba(95,111,172,1) 0%,rgba(35,48,118,1) 100%); /* IE10+ */
+  background: linear-gradient(to bottom, rgba(95,111,172,1) 0%,rgba(35,48,118,1) 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5f6fac', endColorstr='#233076',GradientType=0 ); /* IE6-9 */
+}
+#top-nav {
+  height: 44px;
+  width: 100%;
+  border-top: 1px solid #919FC8;
+  border-bottom: 1px solid  #0D1127;
+}
+
+#toolbar {
+  background: #F3F4F7;
+  height: 44px;
+  width: 100%;
+}
+
+.scrollable {
+  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;
+  position: relative;
+  height: 100%;
+}
+
+img {
+  width: 95%;
+  display: block;
+  margin: 0 auto;
+  padding: 7px;
+}
+
+.hidden {
+  display: none;
+}
+    </style>
+    <script src='http://code.jquery.com/jquery-1.7.2.min.js'></script>
+    <script src='http://cloud.github.com/downloads/wycats/handlebars.js/handlebars-1.0.rc.1.js'></script>
+    <script src='http://cloud.github.com/downloads/emberjs/ember.js/ember-1.0.0-pre.2.min.js'></script>
+    <script>
+
+function animate(x){
+  var t = x,
+  transform = 'matrix3d('
+  transform += 1 +','+ 0 +','+ 0 + ',' +0 + ',';
+  transform += 0 +','+ 1 +','+ 0 + ',' +0 + ',';
+  transform += 0 +','+ 0 +','+ 1 + ',' +0 + ',';
+  transform += t +','+ 0 +','+ 0 + ',' +1 + ')';
+
+  center[0].style.webkitTransform = transform;
+}
+
+$(function(){
+  window.center = $('#center');
+  window.x = 0;
+  window.down = false;
+  window.offset = 0;
+
+  MyApp = Ember.Application.create();
+
+  Clock = Ember.Object.create({
+    x: 0,
+    xDidChange: function(){
+      window.x = parseInt(this.get('x'), 10);
+    }.observes('x')
+  })
+
+  step = function(){
+    animate(x);
+    webkitRequestAnimationFrame(step);
+  };
+
+  webkitRequestAnimationFrame(step);
+
+  $('#center').bind('touchstart',function(e) {
+    var center = $('#center');
+    var targetLeft = center.offset().left;
+    var touchLeft = e.originalEvent.touches[0].pageX;
+
+    center.data('touchstart.offset.left', touchLeft - targetLeft);
+  });
+
+  $('#center').bind('touchend',function(e) {
+    center.data('touchstart.offset.left', 0);
+  });
+
+  $(window).bind('mousewheel',function(e) {
+    var originalEvent = e.originalEvent;
+    var pageX = originalEvent.wheelDeltaX;
+    var newX = pageX + center.data('mousewheel.deltaX') || 0;
+
+    newX *= 0.25;
+    center.data('mousewheel.deltaX', newX);
+
+    window.x = x + newX * -1;
+  });
+
+  $('#center').bind('touchmove',function(e) {
+    var originalEvent = e.originalEvent;
+    var pageX = originalEvent.touches[0].pageX;
+    var newX = pageX - center.data('touchstart.offset.left');
+    var direction = x > newX ? 'left' : 'right';
+
+    window.x = newX;
+  });
+
+  $(window).bind('touchmove', function(e){
+    var target = $(e.target),
+    isScrollable = target.closest('.scrollable').length > 0;
+
+    if(isScrollable){
+      return true;
+    }else{
+      e.preventDefault();
+    }
+  });
+});
+    </script>
+  </head>
+  <body class='not-selectable'>
+    <div id="left">
+      <div id="left-header">
+        <input type="search" id="left-search" placeholder="Search"/>
+      </div>
+      <div id="left-body" class="scrollable">
+        <div class="left-entry">Stefan Penner</div>
+        <div class="left-placeholder">Favorites</div>
+        <div class="left-entry">TEXT</div>
+        <div class="left-entry">TEXT</div>
+        <div class="left-entry">TEXT</div>
+        <div class="left-entry">TEXT</div>
+        <div class="left-placeholder">Pages</div>
+        <div class="left-entry">TEXT</div>
+        <div class="left-entry">TEXT</div>
+        <div class="left-placeholder">Groups</div>
+        <div class="left-entry">TEXT</div>
+        <div class="left-entry">TEXT</div>
+      </div>
+    </div>
+    <div id="center">
+      <div id="header">
+        <div id="top-nav" class="blue-gradient">
+          <div class="inset-button blue-gradient place-left"></div>
+          <div class="inset-button blue-gradient place-right"></div>
+        </div>
+        <div id="toolbar" class="hidden"></div>
+      </div>
+      <div id="content" class="scrollable">
+        <div class="entry"><div class="entry-body"><img src="437960675_fb2684cf38_b.jpg"/></div><div class="entry-footer"></div></div>
+        <div class="entry"><div class="entry-body"><img src="2758611583_cd9cccafd4_b.jpg"/></div><div class="entry-footer"></div></div>
+        <div class="entry"><div class="entry-body"><img src="8203012158.jpg"/></div><div class="entry-footer"></div></div>
+        <div class="entry"><div class="entry-body"><img src="image.jpg"/></div><div class="entry-footer"></div></div>
+        <div class="entry"><div class="entry-body"><img src="437960675_fb2684cf38_b.jpg"/></div><div class="entry-footer"></div></div>
+        <div class="entry"><div class="entry-body"><img src="2758611583_cd9cccafd4_b.jpg"/></div><div class="entry-footer"></div></div>
+        <div class="entry"><div class="entry-body"><img src="8203012158.jpg"/></div><div class="entry-footer"></div></div>
+        <div class="entry"><div class="entry-body"><img src="image.jpg"/></div><div class="entry-footer"></div></div>
+        <div class="entry"><div class="entry-body"><img src="437960675_fb2684cf38_b.jpg"/></div><div class="entry-footer"></div></div>
+        <div class="entry"><div class="entry-body"><img src="2758611583_cd9cccafd4_b.jpg"/></div><div class="entry-footer"></div></div>
+        <div class="entry"><div class="entry-body"><img src="8203012158.jpg"/></div><div class="entry-footer"></div></div>
+        <div class="entry"><div class="entry-body"><img src="image.jpg"/></div><div class="entry-footer"></div></div>
+        <div class="entry"><div class="entry-body"><img src="437960675_fb2684cf38_b.jpg"/></div><div class="entry-footer"></div></div>
+        <div class="entry"><div class="entry-body"><img src="2758611583_cd9cccafd4_b.jpg"/></div><div class="entry-footer"></div></div>
+        <div class="entry"><div class="entry-body"><img src="8203012158.jpg"/></div><div class="entry-footer"></div></div>
+        <div class="entry"><div class="entry-body"><img src="image.jpg"/></div><div class="entry-footer"></div></div>
+        <div class="entry"><div class="entry-body"><img src="437960675_fb2684cf38_b.jpg"/></div><div class="entry-footer"></div></div>
+        <div class="entry"><div class="entry-body"><img src="2758611583_cd9cccafd4_b.jpg"/></div><div class="entry-footer"></div></div>
+        <div class="entry"><div class="entry-body"><img src="8203012158.jpg"/></div><div class="entry-footer"></div></div>
+        <div class="entry"><div class="entry-body"><img src="image.jpg"/></div><div class="entry-footer"></div></div>
+        <div class="entry"><div class="entry-body"><img src="437960675_fb2684cf38_b.jpg"/></div><div class="entry-footer"></div></div>
+        <div class="entry"><div class="entry-body"><img src="2758611583_cd9cccafd4_b.jpg"/></div><div class="entry-footer"></div></div>
+        <div class="entry"><div class="entry-body"><img src="8203012158.jpg"/></div><div class="entry-footer"></div></div>
+        <div class="entry"><div class="entry-body"><img src="image.jpg"/></div><div class="entry-footer"></div></div>
+      </div>
+    </div>
+    <div id="right"></div>
+  </body>
+</html>
