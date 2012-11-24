@@ -1,0 +1,3 @@
+http://betterexplained.com/articles/linear-algebra-guide/ 
+http://9elements.com/html5demos/matrix3d/
+http://www.cores2.com/3D_Tutorial/
