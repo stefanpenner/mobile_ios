@@ -36,3 +36,11 @@ main content
     [ ] slide up/down/left/right
     [ ] slide to positions
     [ ] fade
+
+
+[ ] interactions (events)
+  i want a layer of abstraction above dom events.
+  - for testing
+  - for compatibility/polyfils
+  - will it be to slow? doubtful
+  - touch primary, click secondary
