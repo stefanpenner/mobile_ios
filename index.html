@@ -13,62 +13,52 @@
     <script src="app.js"></script>
   </head>
   <body class='not-selectable'>
-    <script type="text/x-handlebars">
-    <div id="left">
-      <div id="left-header">
-        <input type="search" id="left-search" placeholder="Search"/>
-      </div>
-      <div id="left-body" class="scrollable">
-        <div class="left-entry">Stefan Penner</div>
-        <div class="left-placeholder">Favorites</div>
-        <div class="left-entry">TEXT</div>
-        <div class="left-entry">TEXT</div>
-        <div class="left-entry">TEXT</div>
-        <div class="left-entry">TEXT</div>
-        <div class="left-placeholder">Pages</div>
-        <div class="left-entry">TEXT</div>
-        <div class="left-entry">TEXT</div>
-        <div class="left-placeholder">Groups</div>
-        <div class="left-entry">TEXT</div>
-        <div class="left-entry">TEXT</div>
-      </div>
-    </div>
-    <div id="center">
-      <div id="header">
-        <div id="top-nav" class="blue-gradient">
-          <div class="inset-button blue-gradient place-left"></div>
-          <div class="inset-button blue-gradient place-right"></div>
+    <script type="text/x-handlebars" data-template-name="left">
+        <div id="left">
+          <div id="left-header">
+            <input type="search" id="left-search" placeholder="Search"/>
+          </div>
+          <div id="left-body" class="scrollable">
+            <div class="left-entry">{{App.currentUser.fullName}}r</div>
+            {{#each group in App.groups }}
+              <div class="left-placeholder">{{group.name}}</div>
+              {{#each entry in group.content}}
+                <div class="left-entry">{{entry}}</div>
+              {{/each}}
+            {{/each}}
+          </div>
         </div>
-        <div id="toolbar" class="hidden"></div>
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="center">
+      <div id="center">
+        <div id="header">
+          <div id="top-nav" class="blue-gradient">
+            <div class="inset-button blue-gradient place-left"></div>
+            <div class="inset-button blue-gradient place-right"></div>
+          </div>
+          <div id="toolbar" class="hidden"></div>
+        </div>
+        <div id="content" class="scrollable">
+          {{#each App.newsFeed}}
+            <div class="entry">
+              <div class="entry-body">
+                <img src="437960675_fb2684cf38_b.jpg"/>
+              </div>
+              <div class="entry-footer"></div>
+            </div>
+          {{/each}}
+        </div>
       </div>
-      <div id="content" class="scrollable">
-        <div class="entry"><div class="entry-body"><img src="437960675_fb2684cf38_b.jpg"/></div><div class="entry-footer"></div></div>
-        <div class="entry"><div class="entry-body"><img src="2758611583_cd9cccafd4_b.jpg"/></div><div class="entry-footer"></div></div>
-        <div class="entry"><div class="entry-body"><img src="8203012158.jpg"/></div><div class="entry-footer"></div></div>
-        <div class="entry"><div class="entry-body"><img src="image.jpg"/></div><div class="entry-footer"></div></div>
-        <div class="entry"><div class="entry-body"><img src="437960675_fb2684cf38_b.jpg"/></div><div class="entry-footer"></div></div>
-        <div class="entry"><div class="entry-body"><img src="2758611583_cd9cccafd4_b.jpg"/></div><div class="entry-footer"></div></div>
-        <div class="entry"><div class="entry-body"><img src="8203012158.jpg"/></div><div class="entry-footer"></div></div>
-        <div class="entry"><div class="entry-body"><img src="image.jpg"/></div><div class="entry-footer"></div></div>
-        <div class="entry"><div class="entry-body"><img src="437960675_fb2684cf38_b.jpg"/></div><div class="entry-footer"></div></div>
-        <div class="entry"><div class="entry-body"><img src="2758611583_cd9cccafd4_b.jpg"/></div><div class="entry-footer"></div></div>
-        <div class="entry"><div class="entry-body"><img src="8203012158.jpg"/></div><div class="entry-footer"></div></div>
-        <div class="entry"><div class="entry-body"><img src="image.jpg"/></div><div class="entry-footer"></div></div>
-        <div class="entry"><div class="entry-body"><img src="437960675_fb2684cf38_b.jpg"/></div><div class="entry-footer"></div></div>
-        <div class="entry"><div class="entry-body"><img src="2758611583_cd9cccafd4_b.jpg"/></div><div class="entry-footer"></div></div>
-        <div class="entry"><div class="entry-body"><img src="8203012158.jpg"/></div><div class="entry-footer"></div></div>
-        <div class="entry"><div class="entry-body"><img src="image.jpg"/></div><div class="entry-footer"></div></div>
-        <div class="entry"><div class="entry-body"><img src="437960675_fb2684cf38_b.jpg"/></div><div class="entry-footer"></div></div>
-        <div class="entry"><div class="entry-body"><img src="2758611583_cd9cccafd4_b.jpg"/></div><div class="entry-footer"></div></div>
-        <div class="entry"><div class="entry-body"><img src="8203012158.jpg"/></div><div class="entry-footer"></div></div>
-        <div class="entry"><div class="entry-body"><img src="image.jpg"/></div><div class="entry-footer"></div></div>
-        <div class="entry"><div class="entry-body"><img src="437960675_fb2684cf38_b.jpg"/></div><div class="entry-footer"></div></div>
-        <div class="entry"><div class="entry-body"><img src="2758611583_cd9cccafd4_b.jpg"/></div><div class="entry-footer"></div></div>
-        <div class="entry"><div class="entry-body"><img src="8203012158.jpg"/></div><div class="entry-footer"></div></div>
-        <div class="entry"><div class="entry-body"><img src="image.jpg"/></div><div class="entry-footer"></div></div>
-      </div>
-    </div>
-    <div id="right"></div>
+    </script>
+    <script type="text/x-handlebars" data-template-name="right">
+      <div id="right"></div>
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="application">
+      {{view App.LeftView}}
+      {{view App.CenterView}}
+      {{view App.RightView}}
     </script>
   </body>
 </html>

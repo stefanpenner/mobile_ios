@@ -1,4 +1,60 @@
+window.App = Ember.Application.create();
+
+App.ApplicationController = Ember.Controller.extend();
+App.NewsFeed = Ember.ArrayController.extend();
+App.Contacts = Ember.ArrayController.extend();
+App.Left     = Ember.ArrayController.extend();
+App.User     = Ember.Object.extend();
+
+App.newsFeed = App.NewsFeed.create({
+  content: [1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9]
+});
+
+App.currentUser = App.User.create({
+  fullName: 'Stefan Penner'
+})
+
+App.contacts = App.Contacts.create({
+  content: [1,2,3,4,5]
+})
+
+App.groups = Ember.ArrayController.create({
+  content: [
+    Ember.ArrayController.create({
+      name: 'Favorites',
+      content: ['TEXT','TEXT','TEXT']
+    }),
+
+    Ember.ArrayController.create({
+      name: 'Pages',
+      content: ['TEXT','TEXT','TEXT']
+    }),
+
+    Ember.ArrayController.create({
+      name: 'Groups',
+      content: ['TEXT','TEXT','TEXT']
+    })
+  ]
+});
+
+App.ApplicationView = Ember.View.extend({
+  didInsertElement: function(){ ready(); }
+});
+
+var Gesture = function(){};
+App.Surface = Ember.View.extend({
+  templateName: '',
+  enter: Em.K,
+  exit: Em.K,
+  influences: [ Gesture('swipeleft'), Gesture('swiperight') ]
+});
+
+App.LeftView   = App.Surface.extend({ templateName: 'left'   });
+App.CenterView = App.Surface.extend({ templateName: 'center' });
+App.RightView  = App.Surface.extend({ templateName: 'right'  });
+
 function animate(x){
+  if(!center) { return }
   var t = x,
   transform = 'matrix3d('
   transform += 1 +','+ 0 +','+ 0 + ',' +0 + ',';
@@ -9,13 +65,12 @@ function animate(x){
   center[0].style.webkitTransform = transform;
 }
 
-$(function(){
+var ready = function(){
   window.center = $('#center');
   window.x = 0;
   window.down = false;
   window.offset = 0;
 
-  window.App = Ember.Application.create();
 
   Clock = Ember.Object.create({
     x: 0,
@@ -73,5 +128,5 @@ $(function(){
       e.preventDefault();
     }
   });
-});
+};
 
