@@ -1,18 +1,83 @@
 window.App = Ember.Application.create();
 
 App.ApplicationController = Ember.Controller.extend();
-App.NewsFeed = Ember.ArrayController.extend();
 App.Contacts = Ember.ArrayController.extend();
 App.Left     = Ember.ArrayController.extend();
-App.User     = Ember.Object.extend();
+App.Services = {};
 
-App.newsFeed = App.NewsFeed.create({
-  content: [1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9]
+// We could make facebook ember-data adapter, but this seemed good enough
+App.DeferredRecord = Ember.Mixin.create(Ember.Deferred, {
+  init: function(){
+    this._super();
+  },
+
+  isLoading: Em.computed.not('isLoaded'),
+
+  resolve: function(data){
+    this.set('isLoaded', true);
+    this.setProperties(data);
+    this._super(data);
+  },
+
+  hasErrors: Em.computed.bool('errors'),
+
+  reject: function(errors){
+    this.set('isLoaded', true);
+    this.set('errors', errors);
+    this._super(data);
+  }
+})
+
+App.User = Ember.Object.extend(App.DeferredRecord, {
+  thumb_url: function(){
+    var id = this.get('id')
+
+    if ( id ) {
+      return 'https://graph.facebook.com/' + id + '/picture';
+    } else {
+      return null;
+    }
+  }.property('id')
 });
 
-App.currentUser = App.User.create({
-  fullName: 'Stefan Penner'
-})
+App.NewsFeed = Ember.ArrayController.extend(App.DeferredRecord);
+
+App.DeferredRecord.fromRemoteJson = function(resourceClass, url, mappings){
+  var resource = resourceClass.create();
+
+  $.getJSON(url).then(function(data){
+
+    // edgecase, which should be pulled into some mappins imp
+    if (data.data){
+      data.content = data.data;
+      delete data.data;
+    }
+
+    resource.resolve(data);
+  }, function(errors){
+    resource.reject(errors);
+  });
+
+  return resource;
+};
+
+App.Services.Facebook = {
+  access_token: /* ... snip ...*/,
+  fetchUser: function(id){
+    var url = 'https://graph.facebook.com/' + id;
+
+    return App.DeferredRecord.fromRemoteJson(App.User, url);
+  },
+
+  fetchFeed: function(id){
+    var url = 'https://graph.facebook.com/' + id + '/home?access_token=' + this.access_token;
+
+    return App.DeferredRecord.fromRemoteJson(App.NewsFeed, url);
+  }
+};
+
+App.newsFeed    = App.Services.Facebook.fetchFeed('stefanpenner')
+App.currentUser = App.Services.Facebook.fetchUser('stefanpenner')
 
 App.contacts = App.Contacts.create({
   content: [1,2,3,4,5]
