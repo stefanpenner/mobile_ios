@@ -45,20 +45,28 @@
           <div id="toolbar" class="hidden"></div>
         </div>
         <div id="content" class="scrollable">
-          {{#if App.newsFeed.isLoading}}
-            <h1 style="text-align: center">loading news from facebook...</h1>
-          {{/if}}
-          {{#each App.newsFeed}}
-            <div class="entry">
-              <div class="entry-body">
-                {{message}}
-                {{#if picture}}
-                   <img {{bindAttr src="picture"}}/>
-                {{/if}}
-              </div>
-              <div class="entry-footer"></div>
-            </div>
-          {{/each}}
+          {{#with App.newsFeed}}
+            {{#if isLoading}}
+              <h1 style="text-align: center">loading news from facebook...</h1>
+            {{else}}
+              {{errors.message}}
+              {{#each content}}
+                <div class="entry">
+                  <div class="entry-body">
+                    {{message}}
+                    {{#if picture}}
+                       <img {{bindAttr src="picture"}}/>
+                    {{/if}}
+                  </div>
+                  <div class="entry-footer">
+                    {{#each actions}}
+                      <a {{bindAttr href="link"}}>{{name}}</a>
+                    {{/each}}
+                  </div>
+                </div>
+              {{/each}}
+            {{/if}}
+          {{/with}}
         </div>
       </div>
     </script>

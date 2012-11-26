@@ -21,10 +21,11 @@ App.DeferredRecord = Ember.Mixin.create(Ember.Deferred, {
 
   hasErrors: Em.computed.bool('errors'),
 
-  reject: function(errors){
+  reject: function(request){
+    var error = $.parseJSON(request.responseText).error;
     this.set('isLoaded', true);
-    this.set('errors', errors);
-    this._super(data);
+    this.set('errors', error);
+    this._super(error);
   }
 })
 
@@ -40,7 +41,17 @@ App.User = Ember.Object.extend(App.DeferredRecord, {
   }.property('id')
 });
 
-App.NewsFeed = Ember.ArrayController.extend(App.DeferredRecord);
+App.NewsFeed = Ember.ArrayController.extend(App.DeferredRecord,{
+  objectAt: function(id){
+    var content = this._super(id),
+    type = content.type;
+
+    // We will decorate based on type
+    return Ember.ObjectProxy.create({
+      content: content
+    });
+  }
+});
 
 App.DeferredRecord.fromRemoteJson = function(resourceClass, url, mappings){
   var resource = resourceClass.create();
