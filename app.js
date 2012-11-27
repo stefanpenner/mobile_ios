@@ -5,6 +5,9 @@ App.Contacts = Ember.ArrayController.extend();
 App.Left     = Ember.ArrayController.extend();
 App.Services = {};
 
+App.PhotoEvent = Ember.Object.extend();
+
+
 // We could make facebook ember-data adapter, but this seemed good enough
 App.DeferredRecord = Ember.Mixin.create(Ember.Deferred, {
   init: function(){
@@ -27,30 +30,6 @@ App.DeferredRecord = Ember.Mixin.create(Ember.Deferred, {
     this.set('errors', error);
     this._super(error);
   }
-})
-
-App.User = Ember.Object.extend(App.DeferredRecord, {
-  thumb_url: function(){
-    var id = this.get('id')
-
-    if ( id ) {
-      return 'https://graph.facebook.com/' + id + '/picture';
-    } else {
-      return null;
-    }
-  }.property('id')
-});
-
-App.NewsFeed = Ember.ArrayController.extend(App.DeferredRecord,{
-  objectAt: function(id){
-    var content = this._super(id),
-    type = content.type;
-
-    // We will decorate based on type
-    return Ember.ObjectProxy.create({
-      content: content
-    });
-  }
 });
 
 App.DeferredRecord.fromRemoteJson = function(resourceClass, url, mappings){
@@ -71,6 +50,40 @@ App.DeferredRecord.fromRemoteJson = function(resourceClass, url, mappings){
 
   return resource;
 };
+
+App.User = Ember.Object.extend(App.DeferredRecord, {
+  thumb_url: function(){
+    var id = this.get('id')
+
+    if ( id ) {
+      return 'https://graph.facebook.com/' + id + '/picture';
+    } else {
+      return null;
+    }
+  }.property('id')
+});
+
+App.NewsFeedEntry = Ember.ObjectProxy.extend({
+  user: null,
+})
+
+App.NewsFeed = Ember.ArrayController.extend(App.DeferredRecord,{
+  objectAt: function(id){
+    var content = this._super(id),
+    type = content.type;
+    var user = App.User.create(content.from || {});
+
+    delete content.from;
+
+    // We will decorate based on type
+    var entry = App.NewsFeedEntry.create({
+      content: content,
+      user: user
+    });
+
+    return entry;
+  }
+});
 
 App.Services.Facebook = {
   access_token: /* ... snip ...*/,
@@ -128,6 +141,10 @@ App.Surface = Ember.View.extend({
 App.LeftView   = App.Surface.extend({ templateName: 'left'   });
 App.CenterView = App.Surface.extend({ templateName: 'center' });
 App.RightView  = App.Surface.extend({ templateName: 'right'  });
+
+App.FeedEntryView = Ember.View.extend({
+  templateName: 'feed_entry'
+})
 
 function animate(x){
   if(!center) { return }

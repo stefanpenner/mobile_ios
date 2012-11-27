@@ -35,6 +35,27 @@
         </div>
     </script>
 
+    <script type="text/x-handlebars" data-template-name="feed_entry">
+      <div class="entry">
+        <div class="entry-body">
+          <div class="entry-from">
+            <img class="entry-from-avatar" {{bindAttr src="user.thumb_url"}}/>
+            <div class="entry-from-name">{{user.name}}</div>
+            <div class="entry-from-time">4 Minutes Ago</div>
+          </div>
+          {{message}}
+          {{#if picture}}
+             <img {{bindAttr src="picture"}}/>
+          {{/if}}
+        </div>
+        <div class="entry-footer">
+          {{#each actions}}
+            <a {{bindAttr href="link"}}>{{name}}</a>
+          {{/each}}
+        </div>
+      </div>
+    </script>
+
     <script type="text/x-handlebars" data-template-name="center">
       <div id="center">
         <div id="header">
@@ -49,22 +70,7 @@
             {{#if isLoading}}
               <h1 style="text-align: center">loading news from facebook...</h1>
             {{else}}
-              {{errors.message}}
-              {{#each content}}
-                <div class="entry">
-                  <div class="entry-body">
-                    {{message}}
-                    {{#if picture}}
-                       <img {{bindAttr src="picture"}}/>
-                    {{/if}}
-                  </div>
-                  <div class="entry-footer">
-                    {{#each actions}}
-                      <a {{bindAttr href="link"}}>{{name}}</a>
-                    {{/each}}
-                  </div>
-                </div>
-              {{/each}}
+              {{each App.newsFeed itemViewClass="App.FeedEntryView"}}
             {{/if}}
           {{/with}}
         </div>

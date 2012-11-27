@@ -179,14 +179,24 @@ html, body, #left, #center, #right {
 .entry {
   position: relative;
   background: white;
-  min-height: 100px;
   margin: 1em;
   border-radius: 2px;
   box-shadow: 0 0 5px rgba(0,0,0,0.5)
 }
+
+.entry-from-avatar {
+  width: 40px;
+  height: 40px;
+  float: left;
+}
 .entry-body{
-  margin: 5px;
-  padding-bottom: 30px;
+  padding-bottom: 40px;
+  font-size: 12px;
+  margin: 1em;
+  padding-top: 0.5em;
+  line-height: 1.25em;
+  white-space: normal;
+  overflow-y: hidden;
 }
 
 .entry-footer {
@@ -197,7 +207,14 @@ html, body, #left, #center, #right {
     width: 100%;
     border-bottom-left-radius: 2px;
     border-bottom-right-radius: 2px;
+}
 
+.entry-footer a {
+  line-height: 30px;
+  margin: 1em;
+  text-decoration: none;
+  font-weight: bold;
+  color: #2F387B;
 }
 .blue-gradient {
   background: rgb(95,111,172); /* Old browsers */
@@ -225,6 +242,7 @@ html, body, #left, #center, #right {
 .scrollable {
   -webkit-overflow-scrolling: touch;
   overflow-y: auto;
+  overflow-x: hidden;
   position: relative;
   height: 100%;
 }
