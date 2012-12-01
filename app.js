@@ -27,7 +27,7 @@ App.DeferredRecord = Ember.Mixin.create(Ember.Deferred, {
   reject: function(request){
     var error = $.parseJSON(request.responseText).error;
     this.set('isLoaded', true);
-    this.set('errors', error);
+    this.set('errors', error.message);
     this._super(error);
   }
 });
