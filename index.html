@@ -14,25 +14,23 @@
   </head>
   <body class='not-selectable'>
     <script type="text/x-handlebars" data-template-name="left">
-        <div id="left">
-          <div id="left-header">
-            <input type="search" id="left-search" placeholder="Search"/>
-          </div>
-          <div id="left-body" class="scrollable">
-            <div class="left-entry">
-              {{#with App.currentUser}}
-                <img class="left-user-photo" {{bindAttr src="thumb_url"}}/>
-                {{name}}
-              {{/with}}
-            </div>
-            {{#each group in App.groups }}
-              <div class="left-placeholder">{{group.name}}</div>
-              {{#each entry in group.content}}
-                <div class="left-entry">{{entry}}</div>
-              {{/each}}
-            {{/each}}
-          </div>
+      <div id="left-header">
+        <input type="search" id="left-search" placeholder="Search"/>
+      </div>
+      <div id="left-body" class="scrollable">
+        <div class="left-entry">
+          {{#with App.currentUser}}
+            <img class="left-user-photo" {{bindAttr src="thumb_url"}}/>
+            {{name}}
+          {{/with}}
         </div>
+        {{#each group in App.groups }}
+          <div class="left-placeholder">{{group.name}}</div>
+          {{#each entry in group.content}}
+            <div class="left-entry">{{entry}}</div>
+          {{/each}}
+        {{/each}}
+      </div>
     </script>
 
     <script type="text/x-handlebars" data-template-name="feed_entry">
@@ -57,35 +55,32 @@
     </script>
 
     <script type="text/x-handlebars" data-template-name="center">
-      <div id="center">
-        <div id="header">
-          <div id="top-nav" class="blue-gradient">
-            <div class="inset-button blue-gradient place-left"></div>
-            <div class="inset-button blue-gradient place-right"></div>
-          </div>
-          <div id="toolbar" class="hidden"></div>
+      <div id="header">
+        <div id="top-nav" class="blue-gradient">
+          <div class="inset-button blue-gradient place-left"></div>
+          <div class="inset-button blue-gradient place-right"></div>
         </div>
-        <div id="content" class="scrollable">
-          {{#with App.newsFeed}}
-            {{#if isLoading}}
-              <h1 style="text-align: center">loading news from facebook...</h1>
-            {{else}}
-              {{errors}}
-              {{each App.newsFeed itemViewClass="App.FeedEntryView"}}
-            {{/if}}
-          {{/with}}
-        </div>
+        <div id="toolbar" class="hidden"></div>
+      </div>
+      <div id="content" class="scrollable">
+        {{#with App.newsFeed}}
+          {{#if isLoading}}
+            <h1 style="text-align: center">loading news from facebook...</h1>
+          {{else}}
+            {{errors}}
+            {{each App.newsFeed itemViewClass="App.FeedEntryView"}}
+          {{/if}}
+        {{/with}}
       </div>
     </script>
 
     <script type="text/x-handlebars" data-template-name="right">
-      <div id="right"></div>
     </script>
 
     <script type="text/x-handlebars" data-template-name="application">
-      {{view App.LeftView}}
-      {{view App.CenterView}}
-      {{view App.RightView}}
+      {{outlet leftView}}
+      {{outlet centerView}}
+      {{outlet rightView}}
     </script>
   </body>
 </html>

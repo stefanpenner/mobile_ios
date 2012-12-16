@@ -1,12 +1,39 @@
-window.App = Ember.Application.create();
+window.App = Ember.Application.create({
+  autoinit: false,
+});
+
+App.router = Ember.Router.create({
+  root: Ember.Route.extend({
+    index: Ember.Route.extend({
+      route: '/',
+      connectOutlets: function(router){
+        var applicationController = router.get('applicationController')
+
+        applicationController.connectOutlet({
+          outletName: 'centerView',
+          name: 'center'
+        });
+
+        applicationController.connectOutlet({
+          outletName: 'rightrView',
+          name: 'right'
+        });
+
+        applicationController.connectOutlet({
+          outletName: 'leftView',
+          name: 'left'
+        });
+      }
+    })
+  })
+});
 
 App.ApplicationController = Ember.Controller.extend();
-App.Contacts = Ember.ArrayController.extend();
-App.Left     = Ember.ArrayController.extend();
+App.ContactsController    = Ember.ArrayController.extend();
+App.LeftController        = Ember.ArrayController.extend();
 App.Services = {};
 
 App.PhotoEvent = Ember.Object.extend();
-
 
 // We could make facebook ember-data adapter, but this seemed good enough
 App.DeferredRecord = Ember.Mixin.create(Ember.Deferred, {
@@ -103,7 +130,7 @@ App.Services.Facebook = {
 App.newsFeed    = App.Services.Facebook.fetchFeed('stefanpenner')
 App.currentUser = App.Services.Facebook.fetchUser('stefanpenner')
 
-App.contacts = App.Contacts.create({
+App.contacts = App.ContactsController.create({
   content: [1,2,3,4,5]
 })
 
@@ -127,7 +154,7 @@ App.groups = Ember.ArrayController.create({
 });
 
 App.ApplicationView = Ember.View.extend({
-  didInsertElement: function(){ ready(); }
+  didInsertElement: function(){ }
 });
 
 var Gesture = function(){};
@@ -138,17 +165,33 @@ App.Surface = Ember.View.extend({
   influences: [ Gesture('swipeleft'), Gesture('swiperight') ]
 });
 
-App.LeftView   = App.Surface.extend({ templateName: 'left'   });
-App.CenterView = App.Surface.extend({ templateName: 'center' });
-App.RightView  = App.Surface.extend({ templateName: 'right'  });
+App.LeftView   = App.Surface.extend({ 
+  elementId: 'left',
+  templateName: 'left'
+});
+
+App.CenterView = App.Surface.extend({
+  elementId: 'center',
+  templateName: 'center',
+  didInsertElement: function(){
+    centerWasInserted();
+  }
+});
+
+App.RightView  = App.Surface.extend({
+  elementId: 'right',
+  templateName: 'right'
+});
 
 App.FeedEntryView = Ember.View.extend({
   templateName: 'feed_entry'
 })
 
 function animate(x){
-  if(!center) { return }
+  if(Ember.empty(center)) { return }
+
   var t = x,
+
   transform = 'matrix3d('
   transform += 1 +','+ 0 +','+ 0 + ',' +0 + ',';
   transform += 0 +','+ 1 +','+ 0 + ',' +0 + ',';
@@ -158,12 +201,11 @@ function animate(x){
   center[0].style.webkitTransform = transform;
 }
 
-var ready = function(){
+var centerWasInserted = function(){
   window.center = $('#center');
   window.x = 0;
   window.down = false;
   window.offset = 0;
-
 
   Clock = Ember.Object.create({
     x: 0,
@@ -223,3 +265,6 @@ var ready = function(){
   });
 };
 
+$(function(){
+  App.initialize(App.router);
+});
