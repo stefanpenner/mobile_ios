@@ -155,7 +155,7 @@ html, body, #left, #center, #right {
 
 #center {
   z-index: 3;
-  background: #B0B8D1;
+  background: #C4CAD0;
   width: 100%;
   -webkit-transform-style: preserve-3d;
   overflow: hidden;
