@@ -91,14 +91,12 @@
         <div id="toolbar" class="hidden"></div>
       </div>
       <div id="content" class="scrollable">
-        {{#with App.newsFeed}}
-          {{#if isLoading}}
-            <h1 style="text-align: center">loading news from facebook...</h1>
-          {{else}}
-            {{errors}}
-            {{each App.newsFeed itemViewClass="App.FeedEntryView"}}
-          {{/if}}
-        {{/with}}
+        {{#if isLoading}}
+          <h1 style="text-align: center">loading news from facebook...</h1>
+        {{else}}
+          {{errors}}
+          {{each this itemViewClass="App.FeedEntryView"}}
+        {{/if}}
       </div>
     </script>
 

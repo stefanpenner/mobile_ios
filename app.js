@@ -11,7 +11,8 @@ App.router = Ember.Router.create({
 
         applicationController.connectOutlet({
           outletName: 'centerView',
-          name: 'center'
+          viewClass: App.CenterView,
+          controller: App.Services.Facebook.fetchFeed('stefanpenner')
         });
 
         applicationController.connectOutlet({
@@ -52,7 +53,7 @@ App.DeferredRecord = Ember.Mixin.create(Ember.Deferred, {
   hasErrors: Em.computed.bool('errors'),
 
   reject: function(request){
-    var error = $.parseJSON(request.responseText).error;
+    var error = $.parseJSON(request.responseText);
     this.set('isLoaded', true);
     this.set('errors', error.message);
     this._super(error);
@@ -127,7 +128,6 @@ App.Services.Facebook = {
   }
 };
 
-App.newsFeed    = App.Services.Facebook.fetchFeed('stefanpenner')
 App.currentUser = App.Services.Facebook.fetchUser('stefanpenner')
 
 App.contacts = App.ContactsController.create({
