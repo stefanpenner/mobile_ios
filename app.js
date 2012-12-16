@@ -188,7 +188,7 @@ App.FeedEntryView = Ember.View.extend({
 })
 
 function animate(x){
-  if(Ember.empty(center)) { return }
+  if(Ember.isEmpty(center)) { return }
 
   var t = x,
 
