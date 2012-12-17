@@ -10,14 +10,46 @@
     <script src='http://code.jquery.com/jquery-1.7.2.min.js'></script>
     <script src='http://cloud.github.com/downloads/wycats/handlebars.js/handlebars-1.0.rc.1.js'></script>
     <script src='ember.js'></script>
-    <script src="app.js"></script>
+    <script src='app.js'></script>
+    <script src='//connect.facebook.net/en_US/all.js'></script>
   </head>
   <body class='not-selectable'>
 
-    <div id="fb-root"></div>
+    <div id='fb-root'></div>
     <script>
-    </script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '35316538800', // App ID
+          status     : true, // check login status
+          cookie     : true, // enable cookies to allow the server to access the session
+          xfbml      : true  // parse XFBML
+        });
 
+        FB.Event.subscribe('auth.statusChange', function(response){
+          if(response.status === "connected") {
+            App.Services.Facebook.didLogin(response);
+          }else {
+            App.Services.Facebook.didLogout(response);
+          }
+        });
+
+        FB.getLoginStatus(function (response) {
+          if (response.status === "connected") {
+            // is logged in
+          } else {
+            FB.login();
+          }
+        });
+      };
+
+      (function(d){
+         var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement('script'); js.id = id; js.async = true;
+         js.src = "//connect.facebook.net/en_US/all.js";
+         ref.parentNode.insertBefore(js, ref);
+       }(document));
+    </script>
 
     <script type="text/x-handlebars" data-template-name="left">
       <div id="left-header">

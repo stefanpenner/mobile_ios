@@ -4,6 +4,8 @@ window.App = Ember.Application.create({
 
 App.router = Ember.Router.create({
   root: Ember.Route.extend({
+    // login
+    // logout
     index: Ember.Route.extend({
       route: '/',
       connectOutlets: function(router){
@@ -27,6 +29,11 @@ App.router = Ember.Router.create({
       }
     })
   })
+});
+
+$(function(){
+  App.deferReadiness(); // facebook login
+  App.initialize(App.router);
 });
 
 App.ApplicationController = Ember.Controller.extend();
@@ -114,7 +121,22 @@ App.NewsFeed = Ember.ArrayController.extend(App.DeferredRecord,{
 });
 
 App.Services.Facebook = {
-  access_token: /* ... snip ...*/,
+  didLogin: function(response){
+    App.Services.Facebook.access_token = response.authResponse.accessToken;
+    App.set('currentUser', App.Services.Facebook.fetchUser(response.authResponse.userID));
+    App.currentUser.then(function(){
+      App.advanceReadiness();
+    });
+  },
+
+  didLogout: function(response){
+    // clear stuff bro
+    debugger;
+  },
+  login: function(){
+    return /* promise */;
+  },
+  access_token: null,
   fetchUser: function(id){
     var url = 'https://graph.facebook.com/' + id;
 
@@ -127,8 +149,6 @@ App.Services.Facebook = {
     return App.DeferredRecord.fromRemoteJson(App.NewsFeed, url);
   }
 };
-
-App.currentUser = App.Services.Facebook.fetchUser('stefanpenner')
 
 App.contacts = App.ContactsController.create({
   content: [1,2,3,4,5]
@@ -264,13 +284,3 @@ var centerWasInserted = function(){
     }
   });
 };
-
-$(function(){
-  // do we have an auth token?
-  // if not
-    // defer Readiness
-    // get one
-      // set the token, and the /me paramters we need.
-      // advance readiness
-  App.initialize(App.router);
-});
