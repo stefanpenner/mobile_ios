@@ -266,5 +266,11 @@ var centerWasInserted = function(){
 };
 
 $(function(){
+  // do we have an auth token?
+  // if not
+    // defer Readiness
+    // get one
+      // set the token, and the /me paramters we need.
+      // advance readiness
   App.initialize(App.router);
 });
