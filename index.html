@@ -108,6 +108,14 @@
         </div>
         <div id="toolbar" class="hidden"></div>
       </div>
+      <div id="content" class="scrollable">
+        {{#if isLoading}}
+          <h1 style="text-align: center">loading news from facebook...</h1>
+        {{else}}
+          {{errors}}
+          {{each this itemViewClass="App.FeedEntryView"}}
+        {{/if}}
+      </div>
     </script>
 
     <script type="text/x-handlebars" data-template-name="right">
