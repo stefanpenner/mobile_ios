@@ -1,6 +1,9 @@
+[*] bounce scrollable that doesn't cause the body to scroll on ios
+[ ] bounce scrollable in chrome
+
 [ ] base typography
 [ ] refactor css
-
+http://www.html5rocks.com/en/mobile/mobifying/#toc-optimizations-appcache
 [ ] flush out left column
 [ ] start on right column
 

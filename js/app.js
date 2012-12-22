@@ -273,14 +273,50 @@ var centerWasInserted = function(){
     window.x = newX;
   });
 
-  $(window).bind('touchmove', function(e){
+  // prevent touchmove from scrolling unless within a scrollable
+  $(window).bind('touchmove', function(e) {
     var target = $(e.target),
-    isScrollable = target.closest('.scrollable').length > 0;
+      isScrollable = target.closest('.scrollable').length > 0;
 
-    if(isScrollable){
+    if (isScrollable) {
       return true;
     }else{
       e.preventDefault();
     }
   });
+};
+
+$(function(){
+  $(document.body).on('touchstart', '.scrollable', function(event){
+    var target = $(event.target),
+    scrollable = target.closest('.scrollable'),
+    scrollFix = scrollable.data('scrollFix');
+
+    if (!scrollFix) {
+      scrollFix = new ScrollFix(scrollable[0], event.originalEvent);
+
+      scrollable.data('scrollFix', scrollFix);
+    }
+  });
+});
+
+var ScrollFix = function(elem, event) {
+  // Variables to track inputs
+  var startY, startTopScroll,
+  bouncyTouchStart = function(event){
+    startY = event.touches[0].pageY;
+    startTopScroll = elem.scrollTop;
+
+    if(startTopScroll <= 0){
+      elem.scrollTop = 1;
+    }
+
+    if(startTopScroll + elem.offsetHeight >= elem.scrollHeight) {
+      elem.scrollTop = elem.scrollHeight - elem.offsetHeight - 1;
+    }
+  };
+
+  elem.addEventListener('touchstart',  bouncyTouchStart, false);
+
+  if(event){ bouncyTouchStart(event); }
 };

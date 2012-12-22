@@ -28,6 +28,7 @@ html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  -webkit-text-size-adjust: none;
 }
 body {
   line-height: 1;
@@ -240,7 +241,7 @@ html, body, #left, #center, #right {
 
 .scrollable {
   -webkit-overflow-scrolling: touch;
-  overflow-y: auto;
+  overflow-y: scroll;
   overflow-x: hidden;
   position: relative;
   height: 100%;
@@ -263,5 +264,4 @@ img {
   height: 30px;
   float: left;
   padding-left: 1em;
-}
 }
