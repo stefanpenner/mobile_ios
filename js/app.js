@@ -60,10 +60,9 @@ App.DeferredRecord = Ember.Mixin.create(Ember.Deferred, {
   hasErrors: Em.computed.bool('errors'),
 
   reject: function(request){
-    var error = $.parseJSON(request.responseText);
     this.set('isLoaded', true);
-    this.set('errors', error.message);
-    this._super(error);
+    this.set('errors', 'something when wrong');
+    this._super(request);
   }
 });
 
@@ -121,12 +120,12 @@ App.NewsFeed = Ember.ArrayController.extend(App.DeferredRecord,{
 });
 
 App.Services.Facebook = {
-  didLogin: function(response){
-    App.Services.Facebook.access_token = response.authResponse.accessToken;
-    App.set('currentUser', App.Services.Facebook.fetchUser(response.authResponse.userID));
-    App.currentUser.then(function(){
-      App.advanceReadiness();
-    });
+  didLogin: function(user){
+    var user = App.Services.Facebook.fetchUser(user.userID);
+
+    user.then(function(){ App.advanceReadiness(); });
+
+    App.set('currentUser', user);
   },
 
   didLogout: function(response){
@@ -138,13 +137,22 @@ App.Services.Facebook = {
   },
   access_token: null,
   fetchUser: function(id){
+    var user = App.User.create()
+
+    Facebook.user(id).then(function(data){
+      user.content = data;
+      user.resolve(user);
+    }, function(result){
+      user.reject({ message: result});
+    });
+
     var url = 'https://graph.facebook.com/' + id;
 
-    return App.DeferredRecord.fromRemoteJson(App.User, url);
+    return user;
   },
 
   fetchFeed: function(id){
-    var url = 'https://graph.facebook.com/' + id + '/home?access_token=' + this.access_token;
+    var url = 'https://graph.facebook.com/' + id + '/home?access_token=' + authResponse.accessToken;
 
     return App.DeferredRecord.fromRemoteJson(App.NewsFeed, url);
   }

@@ -17,46 +17,27 @@
     <script src='http://code.jquery.com/jquery-1.7.2.min.js'></script>
     <script src='http://cloud.github.com/downloads/wycats/handlebars.js/handlebars-1.0.rc.1.js'></script>
     <script src='js/ember.js'></script>
+    <script src='js/facebook.js'></script>
     <script src='js/app.js'></script>
     <script src='//connect.facebook.net/en_US/all.js'></script>
   </head>
   <body class='not-selectable'>
+    <a href="#" id="facebook-login">LOGIN TO FACEBOOk</a>
+
     <div id='fb-root'></div>
     <script>
-      window.fbAsyncInit = function() {
-        FB.init({
-          appId      : '35316538800', // App ID
-          status     : true, // check login status
-          cookie     : true, // enable cookies to allow the server to access the session
-          xfbml      : true  // parse XFBML
-        });
+      window.FACEBOOK_APP_ID = '35316538800';
 
-        FB.getLoginStatus(function (response) {
-          if (response.status === "connected") {
-            // is logged in
-          } else if (response.status === 'not_authorized'){
-            alert('not authorized');
-          } else {
-            FB.login();
-          }
-        });
 
-        FB.Event.subscribe('auth.statusChange', function(response){
-          if(response.status === "connected") {
-            App.Services.Facebook.didLogin(response);
-          }else {
-            App.Services.Facebook.didLogout(response);
-          }
-        });
-      };
-
-      (function(d){
-         var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-         if (d.getElementById(id)) {return;}
-         js = d.createElement('script'); js.id = id; js.async = true;
-         js.src = "//connect.facebook.net/en_US/all.js";
-         ref.parentNode.insertBefore(js, ref);
-       }(document));
+      $(function(){
+        Facebook.init().then(function(){
+          Facebook.currentUser().then(App.Services.Facebook.didLogin, function(){
+            $('#facebook-login').click(function(){
+              Facebook.login().then(App.Services.Facebook.didLogin)
+            });
+          });
+        },function(error) { alert(error); });
+      });
     </script>
 
     <script type="text/x-handlebars" data-template-name="left">
