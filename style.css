@@ -30,6 +30,56 @@ html, body {
   overflow: hidden;
   -webkit-text-size-adjust: none;
 }
+
+#header{
+  position: fixed;
+  box-shadow: 0 0 3px black;
+  width: 100%;
+  height: 44px;
+  line-height: 44px;
+  text-align: center;
+  top: 0;
+  z-index: 9999;
+}
+
+#facebook-header-logo{
+  background: url(facebook.png) no-repeat;
+  width: 100px;
+  height: 23px;
+  display: inline-block;
+  margin-top: 7px;
+}
+.large-button{
+  display: inline-block;
+  line-height: 42px;
+  padding: 0em 2em;
+  border-radius: 6px;
+  color: white;
+  text-decoration: none;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, .35);
+  font-family: sans-serif;
+  border-color: rgb(38, 56, 85);
+}
+
+#login-page{
+  text-align: center;
+}
+
+#facebook-login {
+  margin-top: 100px;
+}
+
+#facebook-login:hover {
+    background: -webkit-linear-gradient(#2c4987, #738aba);
+    background:    -moz-linear-gradient(#2c4987, #738aba);
+    background:     -ms-linear-gradient(#2c4987, #738aba);
+    background:      -o-linear-gradient(#2c4987, #738aba);
+    background:         linear-gradient(#2c4987, #738aba);
+}
+#facebook-login:active {
+  box-shadow: inset 1px 1px 1px black;
+}
+
 body {
   line-height: 1;
   font-family: "lucida grande" , tahoma, verdana, arial, sans-serif;
@@ -53,6 +103,14 @@ body {
   -ms-user-select: all;
   user-select: all;
 }
+
+body {
+  background-color: #C4CAD0;
+}
+
+#login-page {
+}
+
 .place-left {
   float: left;
 }
@@ -62,6 +120,7 @@ body {
 }
 .inset-button {
   height: 30px;
+  line-height: 30px;
   width: 48px;
   box-shadow: inset 0 0 3px rgba(0,0,0,1),inset 0 0 0px 1px rgba(0,0,0,0.5);
   border-radius: 5px;
@@ -97,7 +156,10 @@ html,body {
 html, body, #left, #center, #right {
   height: 100%
 }
-
+#center { 
+  z-index: 10;
+  background-color: #C4CAD0;
+}
 #left, #center, #right {
   top: 0;
   left: 0;
@@ -154,12 +216,11 @@ html, body, #left, #center, #right {
   text-indent: 1em;
 }
 
-#center {
+#content {
   z-index: 3;
-  background: #C4CAD0;
+  margin-top: 44px;
   width: 100%;
   -webkit-transform-style: preserve-3d;
-  overflow: hidden;
   box-shadow: 0 0 5px black;
 }
 #right {
@@ -167,16 +228,7 @@ html, body, #left, #center, #right {
   background: rgb(75, 196, 75);
 }
 
-#header{
-  position: fixed;
-  box-shadow: 0 0 5px black;
-  width: 100%;
-  z-index: 9999999;
-}
 
-#content {
-  margin-top: 48px;
-}
 .entry {
   position: relative;
   background: white;
@@ -240,6 +292,7 @@ html, body, #left, #center, #right {
 }
 
 .scrollable {
+  overflow-scrolling: touch;
   -webkit-overflow-scrolling: touch;
   overflow-y: scroll;
   overflow-x: hidden;

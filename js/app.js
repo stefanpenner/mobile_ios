@@ -1,60 +1,16 @@
-window.App = Ember.Application.create({
-  autoinit: false,
-});
-
-App.router = Ember.Router.create({
-  root: Ember.Route.extend({
-    // login
-    // logout
-    index: Ember.Route.extend({
-      route: '/',
-      connectOutlets: function(router){
-        var applicationController = router.get('applicationController')
-
-        applicationController.connectOutlet({
-          outletName: 'centerView',
-          viewClass: App.CenterView,
-          controller: App.Services.Facebook.fetchFeed('stefanpenner')
-        });
-
-        applicationController.connectOutlet({
-          outletName: 'rightrView',
-          name: 'right'
-        });
-
-        applicationController.connectOutlet({
-          outletName: 'leftView',
-          name: 'left'
-        });
-      }
-    })
-  })
-});
-
-$(function(){
-  App.deferReadiness(); // facebook login
-  App.initialize(App.router);
-});
+window.App = Ember.Application.create();
 
 App.ApplicationController = Ember.Controller.extend();
 App.ContactsController    = Ember.ArrayController.extend();
 App.LeftController        = Ember.ArrayController.extend();
 App.Services = {};
 
-App.PhotoEvent = Ember.Object.extend();
-
-// We could make facebook ember-data adapter, but this seemed good enough
 App.DeferredRecord = Ember.Mixin.create(Ember.Deferred, {
-  init: function(){
-    this._super();
-  },
-
   isLoading: Em.computed.not('isLoaded'),
 
   resolve: function(data){
     this.set('isLoaded', true);
     this.setProperties(data);
-    this._super(data);
   },
 
   hasErrors: Em.computed.bool('errors'),
@@ -62,16 +18,11 @@ App.DeferredRecord = Ember.Mixin.create(Ember.Deferred, {
   reject: function(request){
     this.set('isLoaded', true);
     this.set('errors', 'something when wrong');
-    this._super(request);
   }
 });
 
-App.DeferredRecord.fromRemoteJson = function(resourceClass, url, mappings){
-  var resource = resourceClass.create();
-
+App.DeferredRecord.fromRemoteJson = function(resource, url){
   $.getJSON(url).then(function(data){
-
-    // edgecase, which should be pulled into some mappins imp
     if (data.data){
       data.content = data.data;
       delete data.data;
@@ -85,6 +36,7 @@ App.DeferredRecord.fromRemoteJson = function(resourceClass, url, mappings){
   return resource;
 };
 
+
 App.User = Ember.Object.extend(App.DeferredRecord, {
   thumb_url: function(){
     var id = this.get('id')
@@ -97,47 +49,23 @@ App.User = Ember.Object.extend(App.DeferredRecord, {
   }.property('id')
 });
 
-App.NewsFeedEntry = Ember.ObjectProxy.extend({
-  user: null,
-})
-
-App.NewsFeed = Ember.ArrayController.extend(App.DeferredRecord,{
-  objectAt: function(id){
-    var content = this._super(id),
-    type = content.type;
-    var user = App.User.create(content.from || {});
-
-    delete content.from;
-
-    // We will decorate based on type
-    var entry = App.NewsFeedEntry.create({
-      content: content,
-      user: user
-    });
-
-    return entry;
-  }
-});
 
 App.Services.Facebook = {
   didLogin: function(user){
     var user = App.Services.Facebook.fetchUser(user.userID);
-
-    user.then(function(){ App.advanceReadiness(); });
-
     App.set('currentUser', user);
   },
 
   didLogout: function(response){
-    // clear stuff bro
-    debugger;
   },
+
   login: function(){
     return /* promise */;
   },
+
   access_token: null,
   fetchUser: function(id){
-    var user = App.User.create()
+    var user = App.User.create();
 
     Facebook.user(id).then(function(data){
       user.content = data;
@@ -151,12 +79,43 @@ App.Services.Facebook = {
     return user;
   },
 
-  fetchFeed: function(id){
+  feedUrl: function(id){
     var url = 'https://graph.facebook.com/' + id + '/home?access_token=' + authResponse.accessToken;
-
-    return App.DeferredRecord.fromRemoteJson(App.NewsFeed, url);
+    return url;
   }
 };
+App.Router.reopen({
+  //location: 'history'
+});
+
+App.ApplicationRoute = Ember.Route.extend({
+});
+
+App.Router.map(function() {
+  this.route('login');
+  this.resource('feed', function(){
+    this.route('new')
+  });
+
+  this.resource('messages', function(){
+    this.route('new')
+  });
+});
+
+App.FeedRoute = Ember.Route.extend({
+  setupController: function(controller){
+    var url = App.Services.Facebook.feedUrl('me');
+    App.DeferredRecord.fromRemoteJson(controller, url);
+  }
+});
+
+App.FeedController = Ember.ArrayController.extend(App.DeferredRecord)
+
+App.IndexRoute = Ember.Route.extend({ });
+
+App.PhotoEvent = Ember.Object.extend();
+
+App.FeedController = Ember.ArrayController.extend(App.DeferredRecord);
 
 App.contacts = App.ContactsController.create({
   content: [1,2,3,4,5]
@@ -186,27 +145,19 @@ App.ApplicationView = Ember.View.extend({
 });
 
 var Gesture = function(){};
-App.Surface = Ember.View.extend({
-  templateName: '',
-  enter: Em.K,
-  exit: Em.K,
-  influences: [ Gesture('swipeleft'), Gesture('swiperight') ]
-});
 
-App.LeftView   = App.Surface.extend({ 
+App.LeftView   = Ember.View.extend({ 
   elementId: 'left',
   templateName: 'left'
 });
 
-App.CenterView = App.Surface.extend({
-  elementId: 'center',
-  templateName: 'center',
+App.ApplicationView = Ember.View.extend({
   didInsertElement: function(){
     centerWasInserted();
   }
 });
 
-App.RightView  = App.Surface.extend({
+App.RightView  = Ember.View.extend({
   elementId: 'right',
   templateName: 'right'
 });
